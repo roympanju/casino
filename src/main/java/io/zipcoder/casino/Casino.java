@@ -34,6 +34,7 @@ public class Casino {
         return new Player(name,cash);
 
     }
+    //this is atest
     private Game selectGame() {
         scanner = new Scanner(System.in);
         System.out.println("What game would you like to play?");
