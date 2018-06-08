@@ -7,15 +7,11 @@ public abstract class CardGame extends Game implements Gamble{
     }
 
     public void setDeck(int numOfDecks) {
-
        //put deck object in deck Array.
-
     }
+
     public  void deal(int numOfCards){
         //deal numOfCards to players hands from deck
     }
-
-
-
 }
 
