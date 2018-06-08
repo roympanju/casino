@@ -2,7 +2,7 @@ package io.zipcoder.casino;
 
 import java.util.Scanner;
 
-public class KnockOut {
+public class KnockOut extends Game {
     Dice[] dice = new Dice[2];
     Player[] players;
     Player house;
@@ -35,30 +35,22 @@ public class KnockOut {
 
         for (int i = 0; i < players.length; i++) {
             //if(!players[i].isEliminated()) {
-                System.out.println(players[i].getName() + " please press enter to roll");
+                System.out.println(players[i].getName() + " press any key to roll");
                 toRoll = kb.nextLine().equals("\n");
-                if (toRoll) rollValues[i] = getPlayerRollValue();
+                rollValues[i] = getPlayerRollValue();
                 //else players[i].setEliminated();
                 System.out.println(players[i].getName() + " rolled " + rollValues[i]);
             //}
-            houseRollValue = getPlayerRollValue();
-            System.out.println(house.getName() + " rolled " + houseRollValue);
 
         }
+        houseRollValue = getPlayerRollValue();
+        System.out.println(house.getName() + " rolled " + houseRollValue);
+    }
+    public void exit() {
 
 
     }
-
-
-
-
-//    public boolean compareRoll(){
-//        playerRoll = getPlayerRollValues();
-//        houseRoll = getPlayerRollValues();
-//        if (playerRoll == playerDeclaredNum && ){
-//
-//        }
-//
-//        return false;
-
+    public boolean winCondition() {
+        return false;
+    }
 }
