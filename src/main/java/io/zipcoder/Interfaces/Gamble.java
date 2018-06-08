@@ -1,4 +1,4 @@
-package io.zipcoder.casino;
+package io.zipcoder.Interfaces;
 
 public interface Gamble {
     public void bet(int x);
