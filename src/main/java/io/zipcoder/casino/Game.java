@@ -1,9 +1,14 @@
 package io.zipcoder.casino;
 
+
 public abstract class Game implements Playable{
     private Player[] players;
+
     private int winnings;
 
+    public Game(Player[] players){
+        this.players = players;
+    }
     public int getWinnings() {
         return winnings;
     }
