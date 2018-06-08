@@ -2,7 +2,7 @@ package io.zipcoder.casino;
 
 import java.util.Scanner;
 
-public class KnockOut {
+public class KnockOut implements Game{
     Dice[] dice = new Dice[2];
     Player[] players;
     Player house;
@@ -47,6 +47,15 @@ public class KnockOut {
         }
 
 
+    }
+
+    public  void exit(){
+
+
+    }
+
+    public Boolean winCondition(){
+        return false;
     }
 
 
