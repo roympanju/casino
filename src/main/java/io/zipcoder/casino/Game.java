@@ -2,7 +2,7 @@ package io.zipcoder.casino;
 
 
 public abstract class Game implements Playable{
-    private Player[] players;
+    protected Player[] players;
 
     private int winnings;
 
