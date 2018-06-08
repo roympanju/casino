@@ -1,14 +1,15 @@
 package io.zipcoder.casino;
+import java.util.ArrayList;
 
 public class Player {
     private int cash;
     private String name;
-    //ArrayList<Card> hand;
+    ArrayList<Card> hand;
 
 
     public Player(String name,int cash) {
            this.name = name;
-           this.cash =  cash;
+           this.cash = cash;
     }
 
     public String getName() {
@@ -23,8 +24,12 @@ public class Player {
         this.cash = cash;
     }
 
-    public void addCardToHand(){
+    public void addCardToHand(Card cardToAdd){
+        hand.add(cardToAdd);
+    }
 
+    public Card getPlayersCard(int index){
+        return hand.get(index);
     }
 }
 
