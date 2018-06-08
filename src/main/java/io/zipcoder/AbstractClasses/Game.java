@@ -5,7 +5,7 @@ import io.zipcoder.Interfaces.Playable;
 import io.zipcoder.casino.Player;
 
 public abstract class Game implements Playable {
-    protected Player[] players;
+    public Player[] players;
 
     private int winnings;
 
