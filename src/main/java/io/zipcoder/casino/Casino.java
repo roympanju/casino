@@ -15,6 +15,7 @@ public class Casino {
         for (int i = 0; i < players.length; i++) {
             players[i] = createPlayer();
         }
+        playGame();
     }
 
     public int getNumberOfPlayers() {
@@ -32,49 +33,52 @@ public class Casino {
         System.out.println("How much money you got??");
         cash = scanner.nextInt();
         return new Player(name,cash);
-
     }
-    //this is atest
-    //this is also a test
+
     private Game selectGame() {
         scanner = new Scanner(System.in);
         System.out.println("What game would you like to play?");
         String input = scanner.nextLine();
         Game game = null;
-        switch (input) {
-            case "black jack":  game = new BlackJackGame();
-                break;
-            case "memory" :  game = new MemoryGame();
-                break;
-            case "knock out" :  game = new KnockOutGame();
-                break;
-            default: System.out.println("Enter black jack, memory, or knock out.");
-
-        }
+//        switch (input) {
+//            //case "black jack":  game = new BlackJackGame(players);
+//              //  break;
+//            //case "memory" :  game = new MemoryGame(players);
+//               // break;
+//            case "knock out" :  game = new KnockOut(players);
+//                break;
+//            default: System.out.println("Enter black jack, memory, or knock out.");
+//        }
+        System.out.println("All games broken, please type: KnockOut");
+        game = scanner.nextLine().equalsIgnoreCase("knockout") ? new KnockOut(players) : null;
         return game;
-
-
-
-
     }
 
-    private void playGame(){
-
-        boolean isPlaying = false;
+    private void playGame() {
         do {
-            play(selectGame());
+            selectGame().play();
+        } while (continuePlaying());
+    }
+
+    private Boolean continuePlaying() {
+        boolean continuePlaying = false;
+        System.out.println("Would you like to play another game?");
+        if (scanner.nextLine().equals("yes")) {
+            continuePlaying = true;
+        } else {
+            System.out.println("Are you sure you want to leave?");
+            if (scanner.nextLine().equals("yes")) {
+                exitMessage();
+            } else {
+                continuePlaying = true;
+            }
         }
-        While(isPlaying);
-
-
-
-
-
+        return continuePlaying;
     }
 
     private void exitMessage(){
         System.out.println("Thanks for playing " );
-        for(Player player: Players){
+        for(Player player: players){
             System.out.println(player.getName());
         }
 
