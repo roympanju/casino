@@ -1,9 +1,10 @@
 package io.zipcoder.casino;
 
- import java.util.Random;
-
 public class Dice {
 
-    return (int)(Math.Random()*6)+1);
+    public int roll() {
+        return ((int)(Math.random() * 6) + 1);
+    }
+
 
 }
