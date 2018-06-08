@@ -1,6 +1,8 @@
 package io.zipcoder.casino;
 
 
+import io.zipcoder.AbstractClasses.Game;
+
 import java.util.Scanner;
 
 public class Casino {

@@ -1,6 +1,10 @@
-package io.zipcoder.casino;
+package io.zipcoder.AbstractClasses;
 
-public abstract class CardGame extends Game implements Gamble{
+import io.zipcoder.casino.Deck;
+import io.zipcoder.Interfaces.Gamble;
+import io.zipcoder.casino.Player;
+
+public abstract class CardGame extends Game implements Gamble {
     private Deck[] deck;
 
     public CardGame(Player[] players){
