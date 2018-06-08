@@ -58,5 +58,25 @@ public class Casino {
 
     }
 
+    private void playGame(){
 
+        boolean isPlaying = false;
+        do {
+            play(selectGame());
+        }
+        While(isPlaying);
+
+
+
+
+
+    }
+
+    private void exitMessage(){
+        System.out.println("Thanks for playing " );
+        for(Player player: Players){
+            System.out.println(player.getName());
+        }
+
+    }
 }
