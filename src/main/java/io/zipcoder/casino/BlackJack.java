@@ -47,7 +47,7 @@ public class BlackJack extends CardGame{
         waitForPlayers();
 
         deal(2, house);
-        System.out.println("Current hands: ");
+        System.out.println("Current hands:");
         System.out.println(displayHands());
         waitForPlayers();
         wait = scanner.nextLine();
@@ -163,6 +163,10 @@ public class BlackJack extends CardGame{
     public void bet(int bet, Player player) {
         if (player.getCash() <= bet) {
             System.out.println("All In!!!");
+            bet = player.getCash();
+            player.setCash(0);
+        } else if (bet == 0 || bet == 1) {
+            System.out.println("That's cute... All In!!!");
             bet = player.getCash();
             player.setCash(0);
         } else {

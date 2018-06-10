@@ -26,7 +26,7 @@ public abstract class CardGame extends Game implements Gamble {
     }
 
     public void deal(int numOfCards, Player house) {
-        System.out.println("Dealing Cards.");
+        System.out.println("Dealing Cards. \n");
         for(Player player : players){
             for (int i = 0; i < numOfCards; i++) {
                 player.addCardToHand(deck[0].draw());
