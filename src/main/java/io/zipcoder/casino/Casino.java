@@ -3,21 +3,25 @@ package io.zipcoder.casino;
 
 import io.zipcoder.AbstractClasses.Game;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Casino {
-    private Player [] players;
+    private Player[] players;
     //Game gameBeingPlayed;
     private Scanner scanner;
 
     public void main() {
 
         System.out.println("Hello!");
-        players = new Player[getNumberOfPlayers()];
+        int numOfPlayers = getNumberOfPlayers();
+        players = new Player[numOfPlayers];
         for (int i = 0; i < players.length; i++) {
             players[i] = createPlayer();
         }
+
         System.out.println(players.toString());
+
         playGame();
     }
 
@@ -47,7 +51,7 @@ public class Casino {
 
         if (input.equalsIgnoreCase("blackjack")) game = new BlackJack(players);
         else if (input.equalsIgnoreCase("knockout")) game = new KnockOut(players);
-        else if (input.equalsIgnoreCase("memory")) game = new MemoryGame(2, players, 4);
+        //else if (input.equalsIgnoreCase("memory")) game = new MemoryGame(2, players, 4);
         else {
             System.out.println("Game not recognized, how about some Knockout!");
             game = new KnockOut(players);

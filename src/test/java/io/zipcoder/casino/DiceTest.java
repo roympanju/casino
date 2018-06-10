@@ -1,8 +1,7 @@
-/*package io.zipcoder.casino;
+package io.zipcoder.casino;
+
 
 import org.junit.Test;
-
-import java.util.Random;
 
 import static org.junit.Assert.assertTrue;
 
@@ -17,4 +16,5 @@ public class DiceTest {
         assertTrue(min <= actual && max >= actual);
     }
 
-}*/
+}
+

@@ -2,22 +2,39 @@ package io.zipcoder.casino;
 
 import io.zipcoder.AbstractClasses.Game;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class KnockOut extends Game {
-    Dice[] dice = new Dice[2];
-    Player house;
-    int houseRollValue;
-    int[] rollValues;
-    boolean toRoll = false;
-    Scanner kb;
 
+public class KnockOut extends Game {
+
+    private Dice[] dice = new Dice[2];
+    private Player[] players;
+    private ArrayList<Player> playersList;
+    private Player house;
+    private int houseRollValue;
+    private int houseNumber;
+    private int[] rollValues;
+    private boolean toRoll = false;
+    boolean isPlay = true;
+    private Scanner kb;
+
+    
     public KnockOut(Player[] players) {
         super(players);
+        this.players = players;
         rollValues = new int[players.length];
         house = new Player("House", 1000000);
+        houseNumber = (int)((Math.random()*12)+7);
         for (int i = 0; i < dice.length; i++) {
             dice[i] = new Dice();
+        }
+    }
+
+    public void playerArrayList(){
+        playersList = new ArrayList<Player>();
+        for (int i=0; i<players.length; i++){
+            playersList.add(i, players[i]);
         }
     }
 
@@ -32,26 +49,71 @@ public class KnockOut extends Game {
     }
 
     public void play() {
+        playerArrayList();
         kb = new Scanner(System.in);
+        boolean[] winCon = new boolean[playersList.size()];
+        int plNumber[] = new int[playersList.size()];
 
-        for (int i = 0; i < players.length; i++) {
-            //if(!players[i].isEliminated()) {
-                System.out.println(players[i].getName() + " press any key to roll");
-                toRoll = kb.nextLine().equals("\n");
-                rollValues[i] = getPlayerRollValue();
-                //else players[i].setEliminated();
-                System.out.println(players[i].getName() + " rolled " + rollValues[i]);
-            //}
+        while(playersList.size() > 1) for (int i = 0; i < playersList.size(); i++) {
+            if(plNumber[i] == 0){
+                plNumber[i] = getPlayerNumber();
+            }
+
+            System.out.println(playersList.get(i).getName() + " press any key to roll");
+            toRoll = kb.nextLine().equals("\n");
+            rollValues[i] = getPlayerRollValue();
+
+            System.out.println(playersList.get(i).getName() + " rolled " + rollValues[i]);
+            if (rollValues[i] != plNumber[i]) {
+                winCon[i] = true;
+                System.out.println(rollValues[i] + " is not equal to " + plNumber[i]);
+            }
+            else {
+                System.out.println(playersList.get(i).getName() + " you lost try harder next time");
+                playersList.remove(i);
+                winCon[i] = false;
+
+            }
+
 
         }
+        getHouseRollValue();
+
+    }
+
+    public void getHouseRollValue(){
         houseRollValue = getPlayerRollValue();
         System.out.println(house.getName() + " rolled " + houseRollValue);
+        System.out.println("The house set number is "+ houseNumber);
     }
+
+    public int getPlayerNumber(){
+        System.out.println("Please choose your number between 6 and 12:");
+        int number = kb.nextInt();
+        while(number <= 6 || number >= 12) {
+            System.out.println("number should be greater than 6 and less than 12");
+            number = kb.nextInt();
+        }
+
+        return number;
+    }
+
     public void exit() {
 
+        isPlay = false;
+    }
+
+    public boolean winCondition() {
+        return true;
 
     }
-    public boolean winCondition() {
+
+    public boolean winnerIs(boolean a,  boolean b){
+        if ((a && !b)) return a;
+        else if (!a && b) return b;
         return false;
     }
+
+
 }
+

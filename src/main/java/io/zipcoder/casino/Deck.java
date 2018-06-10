@@ -8,7 +8,7 @@ public class Deck {
     private enum CardValues {ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, KING, QUEEN}
 
     public Deck(int numberOfMultipleDecks) {
-        for (int i = 0; i <= numberOfMultipleDecks; i++) {
+        for (int i = 0; i < numberOfMultipleDecks; i++) {
             for (CardSuits suit : CardSuits.values()) {
                 for (CardValues value : CardValues.values()) {
                     deck.add(new Card(suit.toString(), value.toString()));
@@ -23,5 +23,9 @@ public class Deck {
 
     public void shuffle() {
         Collections.shuffle(deck);
+    }
+
+    public int getDeckSize(){
+        return deck.size();
     }
 }
