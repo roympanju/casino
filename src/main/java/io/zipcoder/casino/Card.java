@@ -14,4 +14,18 @@ public class Card {
     public String getValue() {
         return value;
     }
+
+    public int getIntValue() {
+        return value.equals("ACE") ? 11
+             : value.equals("TWO") ? 2
+             : value.equals("THREE") ? 3
+             : value.equals("FOUR") ? 4
+             : value.equals("FIVE") ? 5
+             : value.equals("SIX") ? 6
+             : value.equals("SEVEN") ? 7
+             : value.equals("EIGHT") ? 8
+             : value.equals("NINE") ? 9
+             : 10;
+     }
+
 }

@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 public class KnockOut extends Game {
     Dice[] dice = new Dice[2];
-    Player[] players;
     Player house;
     int houseRollValue;
     int[] rollValues;
@@ -14,7 +13,7 @@ public class KnockOut extends Game {
     Scanner kb;
 
     public KnockOut(Player[] players) {
-        this.players = players;
+        super(players);
         rollValues = new int[players.length];
         house = new Player("House", 1000000);
         for (int i = 0; i < dice.length; i++) {
