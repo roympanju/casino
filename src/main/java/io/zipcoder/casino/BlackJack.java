@@ -9,6 +9,7 @@ public class BlackJack extends CardGame{
     int roundCount = 1;
     boolean playing = true;
     boolean round = true;
+    boolean broke = false;
 
     public BlackJack(Player[] players) {
         super(players, 1);
@@ -18,12 +19,23 @@ public class BlackJack extends CardGame{
     public void play(){
         System.out.println("Welcome to BlackJack!");
         while (round) {
-            constructDeck();
-            System.out.println("Type exit to return to Casino, or any key to begin round.");
-            scanner = new Scanner(System.in);
-            String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("exit")) exit();
-            else playBlackJack();
+            for (Player player : players) {
+                if (player.getCash() == 0) {
+                    System.out.println(player.getName() + " too broke to play, good-bye.");
+                    exit();
+                    broke = true;
+                }
+            }
+
+            if (!broke) {
+                constructDeck();
+
+                System.out.println("Type exit to return to Casino, or any key to begin round.");
+                scanner = new Scanner(System.in);
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("exit")) exit();
+                else playBlackJack();
+            }
         }
     }
 
