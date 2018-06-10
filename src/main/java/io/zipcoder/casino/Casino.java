@@ -3,20 +3,23 @@ package io.zipcoder.casino;
 
 import io.zipcoder.AbstractClasses.Game;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Casino {
-    private Player [] players;
+    private Player[] players;
     //Game gameBeingPlayed;
     private Scanner scanner;
 
     public void main() {
 
         System.out.println("Hello!");
-        players = new Player[getNumberOfPlayers()];
+        int numOfPlayers = getNumberOfPlayers();
+        players = new Player[numOfPlayers];
         for (int i = 0; i < players.length; i++) {
             players[i] = createPlayer();
         }
+
         playGame();
     }
 
@@ -40,6 +43,7 @@ public class Casino {
     private Game selectGame() {
         scanner = new Scanner(System.in);
         System.out.println("What game would you like to play?");
+        System.out.println("All games broken, please type: KnockOut");
         String input = scanner.nextLine();
         Game game = null;
 //        switch (input) {
@@ -51,8 +55,9 @@ public class Casino {
 //                break;
 //            default: System.out.println("Enter black jack, memory, or knock out.");
 //        }
-        System.out.println("All games broken, please type: KnockOut");
-        game = scanner.nextLine().equalsIgnoreCase("knockout") ? new KnockOut(players) : null;
+        //System.out.println("All games broken, please type: KnockOut");
+        game = input.equalsIgnoreCase("knockout") ? new KnockOut(players) : null;
+
         return game;
     }
 

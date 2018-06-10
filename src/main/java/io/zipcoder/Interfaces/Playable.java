@@ -4,6 +4,6 @@ public interface Playable {
 
     public void play();
     public boolean exit();
-    public boolean winCondition();
+    public boolean winCondition(boolean a);
 
 }
