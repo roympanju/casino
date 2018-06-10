@@ -18,9 +18,7 @@ public class BlackJack extends CardGame{
     public void play(){
         System.out.println("Welcome to BlackJack!");
         while (round) {
-            for(Deck e : deck) {
-                e.shuffle();
-            }
+            constructDeck();
             System.out.println("Type exit to return to Casino, or any key to begin round.");
             scanner = new Scanner(System.in);
             String input = scanner.nextLine();
@@ -60,7 +58,7 @@ public class BlackJack extends CardGame{
             while (playing) {
                 System.out.println(player.getName() + ": hit, fold, or stay?");
                 input = scanner.nextLine();
-
+//Need to break this into smaller methods, just looks like shit for now. Clean Code v2 amirite?
                 if (input.equalsIgnoreCase("hit")) {
                     hit(player);
                     if (getHandValue(player.getHand()) > 21) {
@@ -104,9 +102,9 @@ public class BlackJack extends CardGame{
 
     public void roundEnd() {
         for (Player player : players) {
-            discardHand(player);
+            discardPlayerHand(player);
         }
-        discardHand(house);
+        discardPlayerHand(house);
         dumpPot();
         roundCount++;
     }
@@ -132,7 +130,7 @@ public class BlackJack extends CardGame{
 
     public boolean winCondition() {
         int[] results;
-        int winner;
+        int winner = 0;
         for (int i = 0; i < players.length; i++) {
             if (!players[i].isEliminated()) {
                 if (getHandValue(players[i].getHand()) > winner) {

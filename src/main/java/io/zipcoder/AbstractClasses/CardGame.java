@@ -8,14 +8,20 @@ import java.util.*;
 
 public abstract class CardGame extends Game implements Gamble {
     public Deck[] deck;
-    public ArrayList<Card> discard = new ArrayList<Card>();
+    private int deckNumber;
     private int pot;
 
     public CardGame(Player[] players, int deckNumber) {
         super(players);
+        this.deckNumber = deckNumber;
         deck = new Deck[deckNumber];
+        constructDeck();
+    }
+
+    public void constructDeck() {
         for (int i = 0; i < deckNumber; i++) {
             deck[i] = new Deck(1);
+            deck[i].shuffle();
         }
     }
 
@@ -60,18 +66,16 @@ public abstract class CardGame extends Game implements Gamble {
         for(Player player : players) {
             result += player.getName() + ": \n";
             for (int i  = 0; i < player.getHandSize(); i++) {
-                result += player.getCard(i, false).getValue() + " of ";
-                result += player.getCard(i, false).getSuit() + " ";
+                result += player.getCard(i).getValue() + " of ";
+                result += player.getCard(i).getSuit() + " ";
             }
             result += "\n";
         }
         return result;
     }
 
-    public void discardHand (Player player) {
-        for (int i = 0; i < player.getHandSize(); i++) {
-            discard.add(player.getCard(0, true));
-        }
+    public void discardPlayerHand (Player player) {
+        player.discardHand();
     }
 }
 

@@ -40,10 +40,9 @@ public class Casino {
 
     private Game selectGame() {
         scanner = new Scanner(System.in);
-        System.out.println("What game would you like to play?");
+        System.out.println("Some games broken, please type: KnockOut or BlackJack");
         String input = scanner.nextLine();
         Game game = null;
-        System.out.println("Some games broken, please type: KnockOut or BlackJack");
 
         if (input.equalsIgnoreCase("blackjack")) game = new BlackJack(players);
         else if (input.equalsIgnoreCase("knockout")) game = new KnockOut(players);

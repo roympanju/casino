@@ -34,10 +34,9 @@ public class Player {
     }
 
     public void discardHand() {
-       for (int i = 0; i < getHandSize(); i++)  {
-           hand.remove(i);
-       }
+       hand.clear();
     }
+
     public int getHandSize() { return hand.size(); }
 
     public boolean isEliminated() {
