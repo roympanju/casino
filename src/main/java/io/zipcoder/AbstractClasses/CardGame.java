@@ -74,6 +74,16 @@ public abstract class CardGame extends Game implements Gamble {
         return result;
     }
 
+    public String displayHands(Player house) {
+        String result = "";
+            for (int i  = 0; i < house.getHandSize(); i++) {
+                result += house.getCard(i).getValue() + " of ";
+                result += house.getCard(i).getSuit() + "   ";
+            }
+            result += "\n";
+        return result;
+    }
+
     public void discardPlayerHand (Player player) {
         player.discardHand();
     }

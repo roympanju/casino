@@ -17,4 +17,4 @@ public class DiceTest {
         assertTrue(min <= actual && max >= actual);
     }
 
-}
+}*/
