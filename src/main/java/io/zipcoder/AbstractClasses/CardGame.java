@@ -8,7 +8,7 @@ public abstract class CardGame extends Game implements Gamble {
     private Deck[] deck;
 
     public CardGame(Player[] players){
-        super(players);
+        super();
         this.deck[0] = new Deck(1);
     }
 
