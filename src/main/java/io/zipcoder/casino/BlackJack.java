@@ -44,10 +44,9 @@ public class BlackJack extends CardGame{
 
         System.out.println("Begin player turns.");
         for (Player player : players) {
+            player.setEliminated(false);
             if (!blackJack(getHandValue(player.getHand()))) {
-                if (!player.isEliminated()) {
-                    turn(player);
-                }
+                turn(player);
             }
         }
         winCondition();
@@ -67,7 +66,7 @@ public class BlackJack extends CardGame{
                     if (getHandValue(player.getHand()) > 21) {
                         System.out.println("Bust!");
                         playing = false;
-                        player.setEliminated();
+                        player.setEliminated(true);
                     } else if (blackJack(getHandValue(player.getHand()))) {
                         System.out.println("Congratulations " + player.getName() + " BlackJack!!!");
                         payOut(player);
@@ -76,7 +75,7 @@ public class BlackJack extends CardGame{
                     }
                 } else if (input.equalsIgnoreCase("fold")) {
                     playing = false;
-                    player.setEliminated();
+                    player.setEliminated(true);
                 } else if (input.equalsIgnoreCase("stay")) playing = false;
             }
         } else {
@@ -133,7 +132,7 @@ public class BlackJack extends CardGame{
 
     public boolean winCondition() {
         int[] results;
-        int winner = 0;
+        int winner;
         for (int i = 0; i < players.length; i++) {
             if (!players[i].isEliminated()) {
                 if (getHandValue(players[i].getHand()) > winner) {
@@ -142,7 +141,8 @@ public class BlackJack extends CardGame{
             }
         }
         System.out.println(players[winner].getName() + " wins $" + getPot());
-        payOut(players[winner]);
+        if (!players[winner].isEliminated()) payOut(players[winner]);
+        else System.out.println("all players eliminated, house takes the pot.");
         roundEnd();
         return true;
     }
