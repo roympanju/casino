@@ -35,7 +35,7 @@ public class Player {
 
     public void discardHand() {
        for (int i = 0; i < getHandSize(); i++)  {
-           hand.remove
+           hand.remove(i);
        }
     }
     public int getHandSize() { return hand.size(); }
@@ -44,8 +44,8 @@ public class Player {
         return eliminated;
     }
 
-    public void setEliminated() {
-        eliminated = true;
+    public void setEliminated(boolean elim) {
+        eliminated = elim;
     }
 
     public ArrayList<Card> getHand() {
