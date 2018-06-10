@@ -18,9 +18,9 @@ public class KnockOut extends Game {
     private boolean toRoll = false;
     private Scanner kb;
 
+    
     public KnockOut(Player[] players) {
         super(players);
-        this.players = players;
         rollValues = new int[players.length];
         house = new Player("House", 1000000);
         houseNumber = (int)((Math.random()*12)+7);

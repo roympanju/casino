@@ -20,6 +20,8 @@ public class Casino {
             players[i] = createPlayer();
         }
 
+        System.out.println(players.toString());
+
         playGame();
     }
 
@@ -37,26 +39,23 @@ public class Casino {
         name = scanner.nextLine();
         System.out.println("How much money you got??");
         cash = scanner.nextInt();
-        return new Player(name,cash);
+        return new Player(name, cash);
     }
 
     private Game selectGame() {
         scanner = new Scanner(System.in);
-        System.out.println("What game would you like to play?");
-        System.out.println("All games broken, please type: KnockOut");
+        System.out.println("Game options: KnockOut, Memory, BlackJack");
+        System.out.println("Please choose a game!");
         String input = scanner.nextLine();
         Game game = null;
-//        switch (input) {
-//            //case "black jack":  game = new BlackJackGame(players);
-//              //  break;
-//            //case "memory" :  game = new MemoryGame(players);
-//               // break;
-//            case "knock out" :  game = new KnockOut(players);
-//                break;
-//            default: System.out.println("Enter black jack, memory, or knock out.");
-//        }
-        //System.out.println("All games broken, please type: KnockOut");
-        game = input.equalsIgnoreCase("knockout") ? new KnockOut(players) : null;
+
+        if (input.equalsIgnoreCase("blackjack")) game = new BlackJack(players);
+        else if (input.equalsIgnoreCase("knockout")) game = new KnockOut(players);
+        else if (input.equalsIgnoreCase("memory")) game = new MemoryGame(2, players, 4);
+        else {
+            System.out.println("Game not recognized, how about some Knockout!");
+            game = new KnockOut(players);
+        }
 
         return game;
     }

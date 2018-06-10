@@ -7,7 +7,7 @@ import io.zipcoder.casino.Player;
 import java.util.ArrayList;
 
 public abstract class Game implements Playable {
-    protected Player[] players;
+    public Player[] players;
 
     private int winnings;
 
