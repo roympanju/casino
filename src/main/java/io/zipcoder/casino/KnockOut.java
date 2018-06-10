@@ -16,11 +16,13 @@ public class KnockOut extends Game {
     private int houseNumber;
     private int[] rollValues;
     private boolean toRoll = false;
+    boolean isPlay = true;
     private Scanner kb;
 
     
     public KnockOut(Player[] players) {
         super(players);
+        this.players = players;
         rollValues = new int[players.length];
         house = new Player("House", 1000000);
         houseNumber = (int)((Math.random()*12)+7);
@@ -29,7 +31,7 @@ public class KnockOut extends Game {
         }
     }
 
-    public void playerArrayList(Player[] players){
+    public void playerArrayList(){
         playersList = new ArrayList<Player>();
         for (int i=0; i<players.length; i++){
             playersList.add(i, players[i]);
@@ -46,11 +48,9 @@ public class KnockOut extends Game {
 
     }
 
-
     public void play() {
-        playerArrayList(players);
+        playerArrayList();
         kb = new Scanner(System.in);
-        boolean isPlay = true;
         boolean[] winCon = new boolean[playersList.size()];
         int plNumber[] = new int[playersList.size()];
 
@@ -72,8 +72,9 @@ public class KnockOut extends Game {
                 System.out.println(playersList.get(i).getName() + " you lost try harder next time");
                 playersList.remove(i);
                 winCon[i] = false;
-                isPlay = false;
+
             }
+
 
         }
         getHouseRollValue();
@@ -97,13 +98,13 @@ public class KnockOut extends Game {
         return number;
     }
 
-    public boolean exit() {
+    public void exit() {
 
-        return false;
+        isPlay = false;
     }
 
-    public boolean winCondition(boolean a) {
-        return a;
+    public boolean winCondition() {
+        return true;
 
     }
 

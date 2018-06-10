@@ -51,7 +51,7 @@ public class Casino {
 
         if (input.equalsIgnoreCase("blackjack")) game = new BlackJack(players);
         else if (input.equalsIgnoreCase("knockout")) game = new KnockOut(players);
-        else if (input.equalsIgnoreCase("memory")) game = new MemoryGame(2, players, 4);
+        //else if (input.equalsIgnoreCase("memory")) game = new MemoryGame(2, players, 4);
         else {
             System.out.println("Game not recognized, how about some Knockout!");
             game = new KnockOut(players);
