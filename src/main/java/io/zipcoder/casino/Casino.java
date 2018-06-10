@@ -40,31 +40,19 @@ public class Casino {
 
     private Game selectGame() {
         scanner = new Scanner(System.in);
-        System.out.println("Some games broken, please type: KnockOut or BlackJack");
+        System.out.println("Game options: KnockOut, Memory, BlackJack");
+        System.out.println("Please choose a game!");
         String input = scanner.nextLine();
         Game game = null;
-<<<<<<< HEAD
 
         if (input.equalsIgnoreCase("blackjack")) game = new BlackJack(players);
         else if (input.equalsIgnoreCase("knockout")) game = new KnockOut(players);
+        else if (input.equalsIgnoreCase("memory")) game = new MemoryGame(2, players, 4);
         else {
-            System.out.println("Game not recognized, how about some BlackJack!");
-            game = new BlackJack(players);
+            System.out.println("Game not recognized, how about some Knockout!");
+            game = new KnockOut(players);
         }
 
-=======
-        switch (input) {
-//            //case "black jack":  game = new BlackJackGame(players);
-//              //  break;
-            case "memory" :  game = new MemoryGame(2, players, 4);
-                break;
-//           case "knock out" :  game = new KnockOut(players);
-//               break;
-//            default: System.out.println("Enter black jack, memory, or knock out.");
-       }
-        //System.out.println("All games broken, please type: KnockOut");
-       // game = scanner.nextLine().equalsIgnoreCase("knockout") ? new KnockOut(players) : null;
->>>>>>> Navya
         return game;
     }
 
