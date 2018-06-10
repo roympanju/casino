@@ -16,7 +16,7 @@ public class MemoryGameTest {
         D
 
     }
-   /* @Test
+   @Test
     public void testGuess(){
         boolean expected = true;
         MemoryGame memoryGame = new MemoryGame();
@@ -24,6 +24,6 @@ public class MemoryGameTest {
 
         assertEquals( expected,  actual);
 
-    }*/
+    }
 
 
