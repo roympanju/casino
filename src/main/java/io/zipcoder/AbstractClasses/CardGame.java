@@ -6,6 +6,8 @@ import io.zipcoder.Interfaces.Gamble;
 import io.zipcoder.casino.Player;
 import java.util.*;
 
+import java.util.ArrayList;
+
 public abstract class CardGame extends Game implements Gamble {
     public Deck[] deck;
     private int deckNumber;
@@ -26,7 +28,7 @@ public abstract class CardGame extends Game implements Gamble {
     }
 
     public void deal(int numOfCards, Player house) {
-        System.out.println("Dealing Cards.");
+        System.out.println("Dealing Cards. \n");
         for(Player player : players){
             for (int i = 0; i < numOfCards; i++) {
                 player.addCardToHand(deck[0].draw());
@@ -49,14 +51,14 @@ public abstract class CardGame extends Game implements Gamble {
 
     public int getHandValue(ArrayList<Card> hand){
         int result = 0;
-        boolean hasAce = false;
+        int aceCount = 0;
         for (Card card : hand) {
             result += card.getIntValue();
-            if (card.getValue().equals("ACE")) hasAce = true;
+            if (card.getValue().equals("ACE")) aceCount += 1;
         }
-        if (hasAce && result > 21) {
+        if (aceCount > 0 && result > 21) {
             System.out.println("ACE automatically valued at 1 to avoid bust.");
-            result -= 10;
+            result -= (10 * aceCount);
         }
         return result;
     }
@@ -67,10 +69,20 @@ public abstract class CardGame extends Game implements Gamble {
             result += player.getName() + ": \n";
             for (int i  = 0; i < player.getHandSize(); i++) {
                 result += player.getCard(i).getValue() + " of ";
-                result += player.getCard(i).getSuit() + " ";
+                result += player.getCard(i).getSuit() + "   ";
             }
             result += "\n";
         }
+        return result;
+    }
+
+    public String displayHands(Player house) {
+        String result = "";
+            for (int i  = 0; i < house.getHandSize(); i++) {
+                result += house.getCard(i).getValue() + " of ";
+                result += house.getCard(i).getSuit() + "   ";
+            }
+            result += "\n";
         return result;
     }
 
