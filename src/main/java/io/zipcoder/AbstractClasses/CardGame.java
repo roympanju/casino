@@ -63,7 +63,7 @@ public abstract class CardGame extends Game implements Gamble {
         return result;
     }
 
-    public String displayHands() {
+    public String formatHands() {
         String result = "";
         for(Player player : players) {
             result += player.getName() + ": \n";
@@ -76,7 +76,7 @@ public abstract class CardGame extends Game implements Gamble {
         return result;
     }
 
-    public String displayHands(Player house) {
+    public String formatHands(Player house) {
         String result = "";
             for (int i  = 0; i < house.getHandSize(); i++) {
                 result += house.getCard(i).getValue() + " of ";

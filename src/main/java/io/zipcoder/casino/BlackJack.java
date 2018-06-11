@@ -1,152 +1,168 @@
 package io.zipcoder.casino;
 import io.zipcoder.AbstractClasses.CardGame;
-import java.util.*;
+import io.zipcoder.Console.BlackJackConsole;
 
 public class BlackJack extends CardGame{
-    Scanner scanner;
-    String wait;
-    Player house;
-    int roundCount = 1;
-    boolean playing = true;
-    boolean round = true;
-    boolean broke = false;
+    private Player house;
+    private int roundCount = 1;
+    private boolean playing = true;
+    private boolean round = true;
+    private BlackJackConsole display;
 
     public BlackJack(Player[] players) {
         super(players, 1);
         house = new Player("House", 100000);
+        display = new BlackJackConsole();
     }
 
-    public void play(){
-        System.out.println("Welcome to BlackJack!");
+    public void play() {
+        display.welcome();
         while (round) {
-            for (Player player : players) {
-                if (player.getCash() == 0) {
-                    System.out.println(player.getName() + " too broke to play, good-bye.");
-                    exit();
-                    broke = true;
-                }
-            }
-
-            if (!broke) {
+            if (checkBroke()) exit();
+            else {
                 constructDeck();
-
-                System.out.println("Type exit to return to Casino, or any key to begin round.");
-                scanner = new Scanner(System.in);
-                String input = scanner.nextLine();
-                if (input.equalsIgnoreCase("exit")) exit();
+                if (playerExits(display.mainMenu())) exit();
                 else playBlackJack();
             }
         }
     }
 
+    public boolean checkBroke() {
+        for (Player player : players) {
+            if (player.getCash() == 0) {
+                display.brokePlayer(player);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean playerExits(String input) {
+        return input.equalsIgnoreCase("exit");
+    }
+
     public void playBlackJack() {
-        System.out.println("Round " + roundCount);
-
+        display.roundStart(roundCount);
         bettingPhase();
-        System.out.println("Current pot value: $" + getPot());
-        waitForPlayers();
-
+        display.potValue(getPot());
+        display.waitForPlayers();
         deal(2, house);
-        System.out.println("Current hands:");
-        System.out.println(displayHands());
-        waitForPlayers();
-        wait = scanner.nextLine();
+        display.playerHands(formatHands());
+        display.waitForPlayers();
+        display.beginPlayerTurns();
+        playerTurns();
+        houseTurn();
+        winCondition();
+    }
 
-        System.out.println("Begin player turns.");
+    public void playerTurns() {
         for (Player player : players) {
             player.setEliminated(false);
             if (!blackJack(getHandValue(player.getHand()))) {
                 turn(player);
             }
         }
-        houseTurn();
-        winCondition();
     }
 
     public void turn(Player player) {
-        String input;
         playing = true;
         if (!blackJack(getHandValue(player.getHand()))) {
-
             while (playing) {
-                System.out.println(player.getName() + ": hit, fold, or stay?");
-                input = scanner.nextLine();
-//Need to break this into smaller methods, just looks like shit for now. Clean Code v2 amirite???!?!?!?!!
-                if (input.equalsIgnoreCase("hit")) {
-                    hit(player);
-                    if (getHandValue(player.getHand()) > 21) {
-                        System.out.println("Bust!");
-                        playing = false;
-                        player.setEliminated(true);
-                    } else if (blackJack(getHandValue(player.getHand()))) {
-                        System.out.println("Congratulations " + player.getName() + " BlackJack!!!");
-                        playing = false;
-                    }
-                } else if (input.equalsIgnoreCase("fold")) {
-                    playing = false;
-                    player.setEliminated(true);
-                } else if (input.equalsIgnoreCase("stay")) playing = false;
+                playing = playerLogic(player);
             }
         } else {
-            System.out.println("BlackJack!");
+            display.natural();
         }
+    }
+
+    public boolean playerLogic(Player player) {
+        String input = display.collectPlayerInput(player);
+        if (input.equalsIgnoreCase("hit")) {
+            hit(player);
+            if (getHandValue(player.getHand()) > 21) {
+                display.bust();
+                player.setEliminated(true);
+                return false;
+            } else if (blackJack(getHandValue(player.getHand()))) {
+                display.blackJackAchieved(player.getName());
+                return false;
+            }
+        } else if (input.equalsIgnoreCase("fold")) {
+            player.setEliminated(true);
+            return false;
+        }
+        return !input.equalsIgnoreCase("stay");
     }
 
     public void houseTurn() {
-        String input;
         playing = true;
-
-        System.out.println("house turn:");
-        System.out.println(displayHands(house));
-        waitForPlayers();
+        display.houseHand(formatHands(house));
+        display.waitForPlayers();
         while(playing) {
-            if (blackJack(getHandValue(house.getHand()))) {
-                for (Player player : players) {
-                    player.setEliminated(true);
-                }
-                System.out.println("House BlackJack!");
-                playing = false;
-            } else if (getHandValue(house.getHand()) < 17) {
-                System.out.println("House Hits");
-                houseHit(house);
-                waitForPlayers();
-            } else if (getHandValue(house.getHand()) < 21) {
-                System.out.println("House Stays.");
-                playing = false;
-                waitForPlayers();
-            } else {
-                System.out.println("Bust!");
-                house.setEliminated(true);
-                playing = false;
-                waitForPlayers();
+            playing = houseLogic();
+            display.waitForPlayers();
+        }
+    }
+
+    public boolean houseLogic() {
+        if (blackJack(getHandValue(house.getHand()))) {
+            for (Player player : players) {
+                player.setEliminated(true);
             }
+            display.blackJackAchieved(house.getName());
+            return false;
+        } else if (getHandValue(house.getHand()) < 17) {
+            houseHit(house);
+            display.houseHits();
+            display.houseHand(formatHands(house));
+            return true;
+        } else if (getHandValue(house.getHand()) < 21) {
+            display.houseStays();
+            return false;
+        } else {
+            display.bust();
+            house.setEliminated(true);
+            return false;
         }
     }
 
-    public void waitForPlayers() {
-        System.out.println("Press any key to continue");
-        wait = scanner.next();
-    }
-
-    public void bettingPhase(){
-        System.out.println("Reminder, no change allowed whilst betting!");
+    public void bettingPhase() {
+        display.startBetting();
         for (Player player : players) {
-            System.out.println(player.getName() + " please place your bet.");
-            bet(scanner.nextInt(), player);
+            bet(display.betting(player), player);
         }
+    }
+
+    public void bet(int bet, Player player) {
+        if (player.getCash() <= bet) {
+            bet = allIn(player);
+        } else if (bet == 0 || bet == 1) {
+            System.out.println("That's cute...");
+            bet = allIn(player);
+        } else {
+            player.setCash(player.getCash() - bet);
+        }
+        display.betPlaced(bet);
+        setPot(bet);
+    }
+
+    public int allIn(Player player) {
+        int x;
+        display.allIn();
+        x = player.getCash();
+        player.setCash(0);
+        return x;
     }
 
     public void houseHit(Player player) {
         player.addCardToHand(deck[0].draw());
-        System.out.println("house hand:");
-        System.out.println(displayHands(house));
+        display.houseHand(formatHands(house));
 
     }
 
     public void hit(Player player) {
         player.addCardToHand(deck[0].draw());
-        System.out.println("current hands:");
-        System.out.println(displayHands());
+        display.playerHands(formatHands());
     }
 
     public void roundEnd() {
@@ -158,49 +174,59 @@ public class BlackJack extends CardGame{
         roundCount++;
     }
 
-    public void exit(){ round = false; }
-
-    public void bet(int bet, Player player) {
-        if (player.getCash() <= bet) {
-            System.out.println("All In!!!");
-            bet = player.getCash();
-            player.setCash(0);
-        } else if (bet == 0 || bet == 1) {
-            System.out.println("That's cute... All In!!!");
-            bet = player.getCash();
-            player.setCash(0);
-        } else {
-            player.setCash(player.getCash() - bet);
-        }
-        System.out.println("$" + bet + " bet placed.");
-        setPot(bet);
-    }
-
     public boolean blackJack(int handVal){
-        if (handVal == 21) return true;
-        return false;
+        return handVal == 21;
     }
 
-    public boolean winCondition() {
-        int winner = 0;
+
+    public int findWinningHand() {
+        int max = 0;
         for (int i = 0; i < players.length; i++) {
             if (!players[i].isEliminated()) {
-                if (getHandValue(players[i].getHand()) > winner) {
-                    winner = i;
+                if (getHandValue(players[i].getHand()) > max) {
+                    max = i;
                 }
             }
         }
+        return max;
+    }
+
+    public boolean winCondition() {
+        int winner = findWinningHand();
         if (!players[winner].isEliminated()) {
-            System.out.println(players[winner].getName() + " wins $" + getPot());
+            display.winner(players[winner].getName(), getPot());
             payOut(players[winner]);
         }
-        else System.out.println("House Wins!");
+        else if (houseIsWinner(winner)) display.houseWins();
+        else display.houseWins();
         roundEnd();
         return true;
     }
 
+    public boolean houseIsWinner(int winner) {
+        if (!house.isEliminated())
+        return getHandValue(house.getHand()) > getHandValue(players[winner].getHand());
+        else return false;
+    }
+
     public void payOut(Player player){
         player.setCash(player.getCash() + getPot());
+    }
+
+    public void exit(){ round = false; }
+
+
+    //FIELD GETTERS AND SETTERS JUST FOR TESTS
+
+
+    public int getRoundCount() {
+        return roundCount;
+    }
+    public Player getHouse() {
+        return house;
+    }
+    public boolean getRound() {
+        return round;
     }
 
 }
