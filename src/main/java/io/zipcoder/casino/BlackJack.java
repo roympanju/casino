@@ -182,7 +182,6 @@ public class BlackJack extends CardGame{
     }
 
     public boolean winCondition() {
-        int[] results;
         int winner = 0;
         for (int i = 0; i < players.length; i++) {
             if (!players[i].isEliminated()) {
