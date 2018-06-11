@@ -104,6 +104,7 @@ public class KnockOut extends Game implements Gamble {
             if (plNumber[i] == 0) {
                 plNumber[i] = getPlayerNumber(playersList.get(i).getName());
             }
+            console.rollPrompt(playersList.get(i).getName());
             toRoll = kb.nextLine().equals("\n");
             rollValues[i] = getPlayerRollValue();
 
