@@ -1,3 +1,14 @@
+
+package io.zipcoder.casino;
+
+import io.zipcoder.AbstractClasses.Game;
+import io.zipcoder.Interfaces.Gamble;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+
+
 package io.zipcoder.casino;
 
 import io.zipcoder.AbstractClasses.Game;
@@ -6,6 +17,7 @@ import io.zipcoder.Interfaces.Gamble;
 
 import java.util.Arrays;
 import java.util.Scanner;
+
 
 
 public class SlotMachine extends Game implements Gamble {

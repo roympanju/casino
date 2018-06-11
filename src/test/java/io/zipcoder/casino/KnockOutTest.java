@@ -11,18 +11,14 @@ public class KnockOutTest {
     Player player2 = new Player("Froilan",1000);
     Player[] players = {player1, player2};
     KnockOut knockOut = new KnockOut(players);
-    ArrayList<Player> playersList ;
-    //playersList.add(player1)
+    //ArrayList<Player> playersList ;
+
 
     @Test
-    public void playerArrayListTest(){
-        knockOut.playerArrayList();
-        Assert.assertEquals(2,playersList.size());
-    }
-    @Test
-    public void getPotTest(){
-        //knockOut.bettingPhase();
-
+    public void isEqualToTest(){
+        boolean actual = false;
+        boolean expected =knockOut.isEqualTo(10, 20);
+        Assert.assertEquals(expected, actual);
     }
 
 }
