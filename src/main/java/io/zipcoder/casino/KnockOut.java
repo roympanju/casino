@@ -72,17 +72,19 @@ public class KnockOut extends Game implements Gamble {
                 System.out.println(rollValues[i] + " is not equal to " + plNumber[i]);
             }
 
-            if (playersList.size() > 1 && rollValues[i] == plNumber[i]) {
+            if (rollValues[i] == plNumber[i]) {
                 System.out.println(playersList.get(i).getName() + " you lost try harder next time");
                 playersList.remove(i);
+                System.out.println(playersList.size());
+
+
+                if (playersList.size() == 1) {
+
+                    System.out.println("Congratulations " + playersList.get(0).getName() + " you have won " +
+                            "you have won $" + getPot());
+
+                }
             }
-
-            if(playersList.size() == 1) {
-
-                System.out.println("Congratulations " + playersList.get(i).getName() + " you have won " +
-                        "you have won $" + getPot());
-            }
-
 
 //            if (playersList.size() == 1){
 //                System.out.println("Congratulations " + playersList.get(i).getName() + " you have won " +
