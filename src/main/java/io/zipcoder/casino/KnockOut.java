@@ -1,12 +1,13 @@
 package io.zipcoder.casino;
 
 import io.zipcoder.AbstractClasses.Game;
+import io.zipcoder.Interfaces.Gamble;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 
-public class KnockOut extends Game {
+public class KnockOut extends Game implements Gamble {
 
     private Dice[] dice = new Dice[2];
     private Player[] players;
@@ -14,6 +15,8 @@ public class KnockOut extends Game {
     private Player house;
     private int houseRollValue;
     private int houseNumber;
+    private int pot = 0;
+    private int bettings;
     private int[] rollValues;
     private boolean toRoll = false;
     boolean isPlay = true;
@@ -53,10 +56,11 @@ public class KnockOut extends Game {
         kb = new Scanner(System.in);
         boolean[] winCon = new boolean[playersList.size()];
         int plNumber[] = new int[playersList.size()];
-
+        bettingPhase();
+        System.out.println(getPot());
         while(playersList.size() > 1) for (int i = 0; i < playersList.size(); i++) {
-            if(plNumber[i] == 0){
-                plNumber[i] = getPlayerNumber();
+            if(plNumber[i] == 0 ){
+                plNumber[i] = getPlayerNumber(playersList.get(i).getName());
             }
 
             System.out.println(playersList.get(i).getName() + " press any key to roll");
@@ -65,15 +69,25 @@ public class KnockOut extends Game {
 
             System.out.println(playersList.get(i).getName() + " rolled " + rollValues[i]);
             if (rollValues[i] != plNumber[i]) {
-                winCon[i] = true;
                 System.out.println(rollValues[i] + " is not equal to " + plNumber[i]);
             }
-            else {
+
+            if (playersList.size() > 1 && rollValues[i] == plNumber[i]) {
                 System.out.println(playersList.get(i).getName() + " you lost try harder next time");
                 playersList.remove(i);
-                winCon[i] = false;
-
             }
+
+            if(playersList.size() == 1) {
+
+                System.out.println("Congratulations " + playersList.get(i).getName() + " you have won " +
+                        "you have won $" + getPot());
+            }
+
+
+//            if (playersList.size() == 1){
+//                System.out.println("Congratulations " + playersList.get(i).getName() + " you have won " +
+//                        "you have won $" + getPot());
+//            }
 
 
         }
@@ -87,8 +101,8 @@ public class KnockOut extends Game {
         System.out.println("The house set number is "+ houseNumber);
     }
 
-    public int getPlayerNumber(){
-        System.out.println("Please choose your number between 6 and 12:");
+    public int getPlayerNumber(String playerName){
+        System.out.println(playerName + " Please choose your number between 6 and 12:");
         int number = kb.nextInt();
         while(number <= 6 || number >= 12) {
             System.out.println("number should be greater than 6 and less than 12");
@@ -112,6 +126,47 @@ public class KnockOut extends Game {
         if ((a && !b)) return a;
         else if (!a && b) return b;
         return false;
+    }
+
+    public void bet(int bet, Player player){
+        if(bet > player.getCash()) System.out.println("Sorry you don't have enough money for this bet");
+        else if (bet == player.getCash()) {
+            System.out.println("You are all in bet carefully");
+            player.setCash(0);
+        }
+        else {
+            System.out.println("your bet is $" + bet);
+            player.setCash(player.getCash() - bet);
+        }
+
+
+    }
+
+    public void bettingPhase(){
+        for (Player player : players) {
+            System.out.println(player.getName() + " please place your bet.");
+            bettings = kb.nextInt();
+            setPot();
+            bet(bettings, player);
+        }
+    }
+
+
+    public void payOut(Player player){
+
+        player.setCash(player.getCash() + getPot());
+
+
+    }
+
+    public void setPot() {
+        pot += bettings;
+    }
+    public void dumpPot() {
+        pot = 0;
+    }
+    public int getPot() {
+        return pot;
     }
 
 

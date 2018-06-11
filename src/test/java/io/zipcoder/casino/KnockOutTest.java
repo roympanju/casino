@@ -11,7 +11,8 @@ public class KnockOutTest {
     Player player2 = new Player("Froilan",1000);
     Player[] players = {player1, player2};
     KnockOut knockOut = new KnockOut(players);
-    ArrayList<Player> playersList;
+    ArrayList<Player> playersList ;
+    //playersList.add(player1)
 
     @Test
     public void playerArrayListTest(){
