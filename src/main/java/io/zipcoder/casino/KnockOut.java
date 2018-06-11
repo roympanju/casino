@@ -64,71 +64,73 @@ public class KnockOut extends Game implements Gamble {
             rollValues = new int[playersList.size()];
 
             while (playersList.size() == 2) {
-                //for (int i = 0; i < 2; i++) {
-                    if (plNumber[0] == 0) {
-                        plNumber[0] = getPlayerNumber(playersList.get(0).getName());
-                        plNumber[1] = houseNumber;
-                    }
-                    System.out.println(playersList.get(0).getName() + " press any key to roll");
-                    toRoll = kb.nextLine().equals("\n");
-                    rollValues[0] = getPlayerRollValue();
-                    rollValues[1] = getHouseRollValue();
-
-                    if (rollValues[0] == plNumber[0]) {
-                        System.out.println(playersList.get(0).getName() + " you lost try harder next time");
-                        playersList.remove(0);
-                        System.out.println(playersList.size());
-
-
-                        if (playersList.size() == 1) {
-
-                            System.out.println("Congratulations " + playersList.get(0).getName() + " you have won " +
-                                    "you have won $" + getPot() * 2);
-
-                        }
-                    }
-               // }
+                onePlayer(plNumber);
             }
         }
         else {
-            while (playersList.size() > 1) for (int i = 0; i < playersList.size(); i++) {
-                if (plNumber[i] == 0) {
-                    plNumber[i] = getPlayerNumber(playersList.get(i).getName());
-                }
-
-                System.out.println(playersList.get(i).getName() + " press any key to roll");
-                toRoll = kb.nextLine().equals("\n");
-                rollValues[i] = getPlayerRollValue();
-
-                System.out.println(playersList.get(i).getName() + " rolled " + rollValues[i]);
-                if (rollValues[i] != plNumber[i]) {
-                    System.out.println(rollValues[i] + " is not equal to " + plNumber[i]);
-                }
-
-                if (rollValues[i] == plNumber[i]) {
-                    System.out.println(playersList.get(i).getName() + " you lost try harder next time");
-                    playersList.remove(i);
-                    System.out.println(playersList.size());
-
-
-                    if (playersList.size() == 1) {
-
-                        System.out.println("Congratulations " + playersList.get(0).getName() + " you have won " +
-                                "you have won $" + getPot());
-
-                    }
-                }
-
-//            if (playersList.size() == 1){
-//                System.out.println("Congratulations " + playersList.get(i).getName() + " you have won " +
-//                        "you have won $" + getPot());
-//            }
-
+            while (playersList.size() > 1) {
+                multiplePlayers(plNumber);
 
             }
         }
 
 
+    }
+
+    public int onePlayer(int[] plNumber){
+        if (plNumber[0] == 0) {
+            plNumber[0] = getPlayerNumber(playersList.get(0).getName());
+            plNumber[1] = houseNumber;
+        }
+        System.out.println(playersList.get(0).getName() + " press any key to roll");
+        toRoll = kb.nextLine().equals("\n");
+        rollValues[0] = getPlayerRollValue();
+        rollValues[1] = getHouseRollValue();
+
+        if (rollValues[0] == plNumber[0]) {
+            System.out.println(playersList.get(0).getName() + " you lost try harder next time");
+            playersList.remove(0);
+            System.out.println(playersList.size());
+
+
+            if (playersList.size() == 1) {
+
+                System.out.println("Congratulations " + playersList.get(0).getName() + " you have won " +
+                        "you have won $" + getPot() * 2);
+            }
+        }
+        return getPot();
+    }
+
+    public int multiplePlayers(int[] plNumber){
+        for (int i = 0; i < playersList.size(); i++) {
+            if (plNumber[i] == 0) {
+                plNumber[i] = getPlayerNumber(playersList.get(i).getName());
+            }
+
+            System.out.println(playersList.get(i).getName() + " press any key to roll");
+            toRoll = kb.nextLine().equals("\n");
+            rollValues[i] = getPlayerRollValue();
+
+            System.out.println(playersList.get(i).getName() + " rolled " + rollValues[i]);
+            if (!(isEqualTo(rollValues[i], plNumber[i]))) {
+                System.out.println(rollValues[i] + " is not equal to " + plNumber[i]);
+            }
+
+            else{
+                System.out.println(playersList.get(i).getName() + " you lost try harder next time");
+                playersList.remove(i);
+
+                if (isEqualTo(playersList.size(), 1)) {
+
+                    System.out.println("Congratulations " + playersList.get(0).getName() + " you have won " +
+                            "you have won $" + getPot());
+                }
+            }
+
+
+        }
+        return getPot();
     }
 
     public int getHouseRollValue(){
@@ -147,6 +149,13 @@ public class KnockOut extends Game implements Gamble {
         }
 
         return number;
+    }
+
+    public boolean isEqualTo(int a, int b){
+        if(a == b){
+            return true;
+        }
+        return false;
     }
 
     public void exit() {
