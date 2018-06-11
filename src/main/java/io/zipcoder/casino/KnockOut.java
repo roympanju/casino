@@ -18,17 +18,18 @@ public class KnockOut extends Game implements Gamble {
     private int pot = 0;
     private int bettings;
     private int[] rollValues;
+    private int[] plNumber;
     private boolean toRoll = false;
     boolean isPlay = true;
     private Scanner kb;
-
+    KnockOutConsole console = new KnockOutConsole();
     
     public KnockOut(Player[] players) {
         super(players);
         this.players = players;
         rollValues = new int[players.length];
         house = new Player("House", 1000000);
-        houseNumber = (int)((Math.random()*12)+7);
+        houseNumber = (int)((Math.random()*6)+7);
         for (int i = 0; i < dice.length; i++) {
             dice[i] = new Dice();
         }
@@ -54,89 +55,80 @@ public class KnockOut extends Game implements Gamble {
     public void play() {
         playerArrayList();
         kb = new Scanner(System.in);
-        boolean[] winCon = new boolean[playersList.size()];
-        int plNumber[] = new int[playersList.size()];
+        plNumber = new int[playersList.size()];
         bettingPhase();
-        System.out.println(getPot());
         if (playersList.size() == 1){
-            playersList.add(house);
-            plNumber = new int[playersList.size()];
-            rollValues = new int[playersList.size()];
-
+            addHouseAsPlayer(playersList);
             while (playersList.size() == 2) {
-                onePlayer(plNumber);
+                onePlayer();
             }
         }
         else {
             while (playersList.size() > 1) {
-                multiplePlayers(plNumber);
-
+                multiplePlayers();
             }
         }
-
-
     }
 
-    public int onePlayer(int[] plNumber){
+    public ArrayList<Player> addHouseAsPlayer(ArrayList<Player> player){
+        player.add(house);
+        plNumber = new int[playersList.size()];
+        rollValues = new int[playersList.size()];
+        return player;
+    }
+
+    public int onePlayer(){
         if (plNumber[0] == 0) {
             plNumber[0] = getPlayerNumber(playersList.get(0).getName());
             plNumber[1] = houseNumber;
         }
-        System.out.println(playersList.get(0).getName() + " press any key to roll");
+        console.rollPrompt(playersList.get(0).getName());
         toRoll = kb.nextLine().equals("\n");
         rollValues[0] = getPlayerRollValue();
         rollValues[1] = getHouseRollValue();
 
-        if (rollValues[0] == plNumber[0]) {
-            System.out.println(playersList.get(0).getName() + " you lost try harder next time");
+        if (isEqualTo(rollValues[0], plNumber[0])) {
+            console.loseMessageDisplay(playersList.get(0).getName() );
             playersList.remove(0);
-            System.out.println(playersList.size());
 
-
-            if (playersList.size() == 1) {
-
-                System.out.println("Congratulations " + playersList.get(0).getName() + " you have won " +
-                        "you have won $" + getPot() * 2);
+            if (isEqualTo(playersList.size(), 1)) {
+                console.winnerMessage(getPot()*2, playersList.get(0).getName());
             }
         }
         return getPot();
     }
 
-    public int multiplePlayers(int[] plNumber){
+    public int multiplePlayers(){
         for (int i = 0; i < playersList.size(); i++) {
             if (plNumber[i] == 0) {
                 plNumber[i] = getPlayerNumber(playersList.get(i).getName());
             }
 
-            System.out.println(playersList.get(i).getName() + " press any key to roll");
+            System.out.println(playersList.get(i).getName());
             toRoll = kb.nextLine().equals("\n");
             rollValues[i] = getPlayerRollValue();
 
-            System.out.println(playersList.get(i).getName() + " rolled " + rollValues[i]);
+            console.winnerMessage(rollValues[i], playersList.get(i).getName() + " rolled ");
             if (!(isEqualTo(rollValues[i], plNumber[i]))) {
-                System.out.println(rollValues[i] + " is not equal to " + plNumber[i]);
+                console.displayCheekyMessage();
             }
 
             else{
-                System.out.println(playersList.get(i).getName() + " you lost try harder next time");
+                console.loseMessageDisplay(playersList.get(i).getName());
                 playersList.remove(i);
 
                 if (isEqualTo(playersList.size(), 1)) {
-
-                    System.out.println("Congratulations " + playersList.get(0).getName() + " you have won " +
-                            "you have won $" + getPot());
+                    console.winnerMessage(getPot(), playersList.get(0).getName());
                 }
             }
-
-
         }
         return getPot();
     }
 
     public int getHouseRollValue(){
         houseRollValue = getPlayerRollValue();
-        System.out.println(house.getName() + " rolled " + houseRollValue);
-        System.out.println("The house set number is "+ houseNumber);
+        console.displayRolledNumber(house.getName(), houseRollValue);
+        console.displayHouseSetNumber(houseNumber);
         return houseRollValue;
     }
 
@@ -165,32 +157,23 @@ public class KnockOut extends Game implements Gamble {
 
     public boolean winCondition() {
         return true;
-
-    }
-
-    public boolean winnerIs(boolean a,  boolean b){
-        if ((a && !b)) return a;
-        else if (!a && b) return b;
-        return false;
     }
 
     public void bet(int bet, Player player){
-        if(bet > player.getCash()) System.out.println("Sorry you don't have enough money for this bet");
+        if(bet > player.getCash()) console.promptOverBetting();
         else if (bet == player.getCash()) {
-            System.out.println("You are all in bet carefully");
+            console.promptBettingAll();
             player.setCash(0);
         }
         else {
-            System.out.println("your bet is $" + bet);
+            console.displayBet(bet);
             player.setCash(player.getCash() - bet);
         }
-
-
     }
 
     public void bettingPhase(){
         for (Player player : players) {
-            System.out.println(player.getName() + " please place your bet.");
+            console.promptPlaceBet(player.getName());
             bettings = kb.nextInt();
             setPot();
             bet(bettings, player);
@@ -199,10 +182,7 @@ public class KnockOut extends Game implements Gamble {
 
 
     public void payOut(Player player){
-
         player.setCash(player.getCash() + getPot());
-
-
     }
 
     public void setPot() {
