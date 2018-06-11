@@ -47,10 +47,10 @@ public class Casino {
         System.out.println("Game options: KnockOut, Memory, BlackJack");
         System.out.println("Please choose a game!");
         String input = scanner.nextLine();
-        Game game = null;
+        Game game;
 
         if (input.equalsIgnoreCase("blackjack")) game = new BlackJack(players);
-        if (input.equalsIgnoreCase("knockout")) game = new KnockOut(players);
+        else if (input.equalsIgnoreCase("knockout")) game = new KnockOut(players);
         else if (input.equalsIgnoreCase("memory")) game = new MemoryGame(2, players, 4);
         //else if (input.equalsIgnoreCase("slots")) game = new SlotMachine(players);
         else {
