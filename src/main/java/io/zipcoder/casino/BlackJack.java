@@ -27,7 +27,7 @@ public class BlackJack extends CardGame{
         }
     }
 
-    private boolean checkBroke() {
+    public boolean checkBroke() {
         for (Player player : players) {
             if (player.getCash() == 0) {
                 display.brokePlayer(player);
@@ -37,28 +37,25 @@ public class BlackJack extends CardGame{
         return false;
     }
 
-    private boolean playerExits(String input) {
+    public boolean playerExits(String input) {
         return input.equalsIgnoreCase("exit");
     }
 
-    private void playBlackJack() {
+    public void playBlackJack() {
         display.roundStart(roundCount);
-
         bettingPhase();
         display.potValue(getPot());
         display.waitForPlayers();
-
         deal(2, house);
         display.playerHands(formatHands());
         display.waitForPlayers();
-
         display.beginPlayerTurns();
         playerTurns();
         houseTurn();
         winCondition();
     }
 
-    private void playerTurns() {
+    public void playerTurns() {
         for (Player player : players) {
             player.setEliminated(false);
             if (!blackJack(getHandValue(player.getHand()))) {
@@ -67,7 +64,7 @@ public class BlackJack extends CardGame{
         }
     }
 
-    private void turn(Player player) {
+    public void turn(Player player) {
         playing = true;
         if (!blackJack(getHandValue(player.getHand()))) {
             while (playing) {
@@ -78,7 +75,7 @@ public class BlackJack extends CardGame{
         }
     }
 
-    private boolean playerLogic(Player player) {
+    public boolean playerLogic(Player player) {
         String input = display.collectPlayerInput(player);
         if (input.equalsIgnoreCase("hit")) {
             hit(player);
@@ -93,12 +90,11 @@ public class BlackJack extends CardGame{
         } else if (input.equalsIgnoreCase("fold")) {
             player.setEliminated(true);
             return false;
-        } else if (input.equalsIgnoreCase("stay")) return false;
-
-        return true;
+        }
+        return !input.equalsIgnoreCase("stay");
     }
 
-    private void houseTurn() {
+    public void houseTurn() {
         playing = true;
         display.houseHand(formatHands(house));
         display.waitForPlayers();
@@ -108,7 +104,7 @@ public class BlackJack extends CardGame{
         }
     }
 
-    private boolean houseLogic() {
+    public boolean houseLogic() {
         if (blackJack(getHandValue(house.getHand()))) {
             for (Player player : players) {
                 player.setEliminated(true);
@@ -130,12 +126,13 @@ public class BlackJack extends CardGame{
         }
     }
 
-    private void bettingPhase() {
+    public void bettingPhase() {
         display.startBetting();
         for (Player player : players) {
             bet(display.betting(player), player);
         }
     }
+
     public void bet(int bet, Player player) {
         if (player.getCash() <= bet) {
             bet = allIn(player);
@@ -149,7 +146,7 @@ public class BlackJack extends CardGame{
         setPot(bet);
     }
 
-    private int allIn(Player player) {
+    public int allIn(Player player) {
         int x;
         display.allIn();
         x = player.getCash();
@@ -157,18 +154,18 @@ public class BlackJack extends CardGame{
         return x;
     }
 
-    private void houseHit(Player player) {
+    public void houseHit(Player player) {
         player.addCardToHand(deck[0].draw());
         display.houseHand(formatHands(house));
 
     }
 
-    private void hit(Player player) {
+    public void hit(Player player) {
         player.addCardToHand(deck[0].draw());
         display.playerHands(formatHands());
     }
 
-    private void roundEnd() {
+    public void roundEnd() {
         for (Player player : players) {
             discardPlayerHand(player);
         }
@@ -177,12 +174,12 @@ public class BlackJack extends CardGame{
         roundCount++;
     }
 
-    private boolean blackJack(int handVal){
+    public boolean blackJack(int handVal){
         return handVal == 21;
     }
 
 
-    private int findWinningHand() {
+    public int findWinningHand() {
         int max = 0;
         for (int i = 0; i < players.length; i++) {
             if (!players[i].isEliminated()) {
@@ -217,5 +214,19 @@ public class BlackJack extends CardGame{
     }
 
     public void exit(){ round = false; }
+
+
+    //FIELD GETTERS AND SETTERS JUST FOR TESTS
+
+
+    public int getRoundCount() {
+        return roundCount;
+    }
+    public Player getHouse() {
+        return house;
+    }
+    public boolean getRound() {
+        return round;
+    }
 
 }
