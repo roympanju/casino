@@ -11,55 +11,99 @@ public class BlackJackConsole {
         scanner = new Scanner(System.in);
     }
 
+    private void print(String message) {
+        System.out.println(message);
+    }
+
     public void waitForPlayers() {
-        System.out.println("Press any key to continue");
-        wait = scanner.next();
+        print("Press any key to continue");
+        wait = scanner.nextLine();
     }
 
     public void welcome() {
-        System.out.println("Welcome to BlackJack!");
+        print("Welcome to BlackJack!");
     }
 
     public String mainMenu() {
-        System.out.println("Type exit to return to Casino, or any key to begin round.");
+        print("Type exit to return to Casino, or any key to begin round.");
         return scanner.nextLine();
     }
 
     public void brokePlayer(Player player) {
-        System.out.println(player.getName() + " too broke to play, good-bye.");
+        print(player.getName() + " too broke to play, good-bye.");
     }
 
     public void roundStart(int roundCount) {
-        System.out.println("Round " + roundCount);
+        print("Round " + roundCount);
+    }
+
+    public void beginPlayerTurns() {
+        print("Begin player turns.");
+    }
+
+    public void potValue(int pot) {
+        print("Current pot value: $" + pot);
     }
 
     public void startBetting() {
-        System.out.println("Reminder, no change allowed whilst betting!");
+        print("Reminder, no change allowed whilst betting!");
     }
 
     public int betting (Player player) {
-        System.out.println(player.getName() + " please place your bet.");
+        print(player.getName() + " please place your bet.");
         return scanner.nextInt();
     }
 
     public void betPlaced(int bet) {
-        System.out.println("$" + bet + " bet placed.");
+        print("$" + bet + " bet placed.");
     }
 
     public void allIn() {
-        System.out.println("All In!!!");
+        print("All In!!!");
     }
 
     public void playerHands(String hands) {
-        System.out.println("current hands:");
-        System.out.println(hands);
+        print("Current hands:");
+        print(hands);
     }
 
     public void houseHand(String hand) {
-        System.out.println("house hand:");
-        System.out.println(hand);
+        print("House hand:");
+        print(hand);
 
     }
 
+    public String collectPlayerInput(Player player) {
+        print(player.getName() + ": hit, fold, or stay?");
+        return scanner.nextLine();
+    }
+
+    public void bust() {
+        print("Bust!");
+    }
+
+    public void blackJackAchieved(String name) {
+        print("Congratulations " + name + " BlackJack!!!");
+    }
+
+    public void houseHits() {
+        print("House Hits \n");
+    }
+
+    public void houseStays() {
+        print("House Stays.");
+    }
+
+    public void winner(String name, int money) {
+        print(name + " wins $" + money);
+    }
+
+    public void houseWins() {
+        print("House Wins!");
+    }
+
+    public void natural() {
+        print("BlackJack!");
+    }
 
 }

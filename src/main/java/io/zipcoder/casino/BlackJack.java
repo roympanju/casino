@@ -1,10 +1,8 @@
 package io.zipcoder.casino;
 import io.zipcoder.AbstractClasses.CardGame;
 import io.zipcoder.Console.BlackJackConsole;
-import java.util.*;
 
 public class BlackJack extends CardGame{
-    private Scanner scanner;
     private Player house;
     private int roundCount = 1;
     private boolean playing = true;
@@ -47,14 +45,14 @@ public class BlackJack extends CardGame{
         display.roundStart(roundCount);
 
         bettingPhase();
-        System.out.println("Current pot value: $" + getPot());
+        display.potValue(getPot());
         display.waitForPlayers();
 
         deal(2, house);
         display.playerHands(formatHands());
         display.waitForPlayers();
 
-        System.out.println("Begin player turns.");
+        display.beginPlayerTurns();
         playerTurns();
         houseTurn();
         winCondition();
@@ -76,25 +74,22 @@ public class BlackJack extends CardGame{
                 playing = playerLogic(player);
             }
         } else {
-            System.out.println("BlackJack!");
+            display.natural();
         }
     }
 
     private boolean playerLogic(Player player) {
-        System.out.println(player.getName() + ": hit, fold, or stay?");
-        String input = scanner.nextLine();
-
+        String input = display.collectPlayerInput(player);
         if (input.equalsIgnoreCase("hit")) {
             hit(player);
             if (getHandValue(player.getHand()) > 21) {
-                System.out.println("Bust!");
+                display.bust();
                 player.setEliminated(true);
                 return false;
             } else if (blackJack(getHandValue(player.getHand()))) {
-                System.out.println("Congratulations " + player.getName() + " BlackJack!!!");
+                display.blackJackAchieved(player.getName());
                 return false;
             }
-
         } else if (input.equalsIgnoreCase("fold")) {
             player.setEliminated(true);
             return false;
@@ -105,8 +100,6 @@ public class BlackJack extends CardGame{
 
     private void houseTurn() {
         playing = true;
-
-        System.out.println("House turn:");
         display.houseHand(formatHands(house));
         display.waitForPlayers();
         while(playing) {
@@ -120,17 +113,18 @@ public class BlackJack extends CardGame{
             for (Player player : players) {
                 player.setEliminated(true);
             }
-            System.out.println("House BlackJack!");
+            display.blackJackAchieved(house.getName());
             return false;
         } else if (getHandValue(house.getHand()) < 17) {
-            System.out.println("House Hits");
             houseHit(house);
+            display.houseHits();
+            display.houseHand(formatHands(house));
             return true;
         } else if (getHandValue(house.getHand()) < 21) {
-            System.out.println("House Stays.");
+            display.houseStays();
             return false;
         } else {
-            System.out.println("Bust!");
+            display.bust();
             house.setEliminated(true);
             return false;
         }
@@ -203,12 +197,19 @@ public class BlackJack extends CardGame{
     public boolean winCondition() {
         int winner = findWinningHand();
         if (!players[winner].isEliminated()) {
-            System.out.println(players[winner].getName() + " wins $" + getPot());
+            display.winner(players[winner].getName(), getPot());
             payOut(players[winner]);
         }
-        else System.out.println("House Wins!");
+        else if (houseIsWinner(winner)) display.houseWins();
+        else display.houseWins();
         roundEnd();
         return true;
+    }
+
+    public boolean houseIsWinner(int winner) {
+        if (!house.isEliminated())
+        return getHandValue(house.getHand()) > getHandValue(players[winner].getHand());
+        else return false;
     }
 
     public void payOut(Player player){
