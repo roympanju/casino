@@ -19,7 +19,10 @@ public class KnockOutTest {
         knockOut.playerArrayList();
         Assert.assertEquals(2,playersList.size());
     }
+    @Test
+    public void getPotTest(){
 
+    }
 
 }
 
