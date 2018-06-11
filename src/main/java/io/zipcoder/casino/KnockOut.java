@@ -88,6 +88,7 @@ public class KnockOut extends Game implements Gamble {
         rollValues[1] = getHouseRollValue();
 
         if (isEqualTo(rollValues[0], plNumber[0])) {
+            console.displayRolledNumber(playersList.get(0).getName(), rollValues[0]);
             console.loseMessageDisplay(playersList.get(0).getName() );
             playersList.remove(0);
 
@@ -103,12 +104,10 @@ public class KnockOut extends Game implements Gamble {
             if (plNumber[i] == 0) {
                 plNumber[i] = getPlayerNumber(playersList.get(i).getName());
             }
-
-            System.out.println(playersList.get(i).getName());
             toRoll = kb.nextLine().equals("\n");
             rollValues[i] = getPlayerRollValue();
 
-            console.winnerMessage(rollValues[i], playersList.get(i).getName() + " rolled ");
+            console.displayRolledNumber(playersList.get(i).getName(), rollValues[i]);
             if (!(isEqualTo(rollValues[i], plNumber[i]))) {
                 console.displayCheekyMessage();
             }
