@@ -1,6 +1,7 @@
 
 package io.zipcoder.casino;
 
+import io.zipcoder.Console.MemoryConsole;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -8,6 +9,8 @@ import java.util.Scanner;
 import io.zipcoder.AbstractClasses.Game;
 
 public class MemoryGame extends Game  {
+
+    MemoryConsole memConsole = new MemoryConsole();
 
     public void exit(){
 
@@ -24,6 +27,8 @@ public class MemoryGame extends Game  {
     ArrayList<Card> cardList = new ArrayList<Card>();
     String[] valuelist = { "1","2","3","4","5","6","7","8","9","10","J","Q","K","A"};
     String[] suitlist = {"diamond","spade","heart","club"};
+
+
 
     public MemoryGame(int maxTry,Player[] players,int numOfCards) {
 
@@ -46,50 +51,78 @@ public class MemoryGame extends Game  {
 
 
     }
+
+    //public void play() {
+
+        // loop through turns
+            // player picks first card
+                // show prompt
+                // get input
+                // validate selection
+                // display result
+            // player picks second card
+                // show prompt
+                // get input
+                // validate selection
+                // display result
+            // check for a match
+                // check match
+                // match success: win?
+                    // win: doWinStuff
+            // outOfTries?
+                // out of tries: quit
+    //}
+
+    //public boolean isValidSelection(int selection) {
+
+    //}
+
     public void play() {
         int count = 0;
         while (true) {
-            System.out.println("Enter the  position to be opened");
+            memConsole.println("Enter the position to be opened");
             int pos1 = sc.nextInt();
             Card n1 = cardList.get(pos1);
-            if(n1 == null) {
-                System.out.println("Your position is already taken,please enter a new postion");
+            if (n1 == null) {
+                memConsole.println("Your position is already taken,please enter a new postion");
                 continue;
             }
 
-            System.out.println("Your card is: " + "value is " + n1.getValue() + " suit is " + n1.getSuit());
+            memConsole.println("Your card is: " + "value is " + n1.getValue() + " suit is " + n1.getSuit());
 
-            System.out.println("Enter the  guess position");
+            memConsole.println("Enter the guess position");
             int pos2 = sc.nextInt();
             Card n2 = cardList.get(pos2);
-            if(n2== null) {
-                System.out.println("Your position is already taken,please enter a new postion");
+            if (n2 == null) {
+                memConsole.println("Your position is already taken,please enter a new postion");
                 continue;
             }
 
-            System.out.println("Your guess is: " + " value is " + n2.getValue() + " suit is " + n2.getSuit());
+            memConsole.println("Your guess is: " + " value is " + n2.getValue() + " suit is " + n2.getSuit());
+
+
             if (isMatch(n1, n2)) {
-                System.out.println("Congratulations, your cards are matching");
+                memConsole.println("Congratulations, your cards are matching");
                 cardList.set(pos1, null);
-                cardList.set(pos2,null);
+                cardList.set(pos2, null);
 
 
             }
-            if(iscardListNull()){
-                System.out.println("Congratulations,the game is over");
-                break;
-            }
-            count ++;
-            if(count == maxTry)
-            {
-                System.out.println("You have reached the maximum try");
-                break;
-            }
 
 
+        if (iscardListNull()) {
+            memConsole.println("Congratulations,the game is over");
+            break;
+        }
+        count++;
+        if (count == maxTry) {
+            memConsole.println("You have reached the maximum try");
+            break;
         }
 
     }
+    }
+
     public  boolean isMatch(Card n1,Card n2)
     {
         String suit1 = n1.getSuit();
@@ -122,11 +155,9 @@ public class MemoryGame extends Game  {
                 return false;
             }
 
-
         }
         return true;
     }
-
 
 
 }

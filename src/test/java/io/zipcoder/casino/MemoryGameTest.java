@@ -31,5 +31,21 @@ public class MemoryGameTest {
 
 
     }
+
+//    @Test
+//    public void testIsValidSelection() {
+//        boolean expected = false;
+//        Player[] p1 = new Player[1];
+//        MemoryGame memoryGame = new MemoryGame(3, p1,4 );
+//        boolean actual = memoryGame.isValidSelection();
+//        // set up a card selection that you KNOW is valid
+//        // give the selection to the isValidSelection method
+//        // assert that it is in fact valid
+//    }
+
+    /*@Test
+    public void testIsValidSelectionFailure() {
+        //
+    }*/
 }
 
