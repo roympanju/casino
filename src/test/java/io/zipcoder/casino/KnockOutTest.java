@@ -7,10 +7,12 @@ import java.util.ArrayList;
 
 public class KnockOutTest {
 
+    ArrayList<Player> players = new ArrayList<Player>();
+
     Player player1 = new Player("Roy",1000);
     Player player2 = new Player("Froilan",1000);
-    Player[] players = {player1, player2};
-    KnockOut knockOut = new KnockOut(players);
+    Player[] players1 = {player1, player2};
+    KnockOut knockOut = new KnockOut(players1);
     //ArrayList<Player> playersList ;
 
 
@@ -21,6 +23,17 @@ public class KnockOutTest {
         Assert.assertEquals(expected, actual);
     }
 
+    @Test
+    public void addPlayerToArrayListTest(){
+        players.add(player1);
+        players = knockOut.addHouseAsPlayer(players);
+        int actual = 2;
+        int expected  = players.size();
+        Assert.assertEquals(expected, actual);
+
+    }
+
 }
+
 
 
