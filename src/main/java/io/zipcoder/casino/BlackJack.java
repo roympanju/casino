@@ -1,30 +1,29 @@
 package io.zipcoder.casino;
 import io.zipcoder.AbstractClasses.CardGame;
+import io.zipcoder.Console.BlackJackConsole;
 import java.util.*;
 
 public class BlackJack extends CardGame{
     private Scanner scanner;
-    private String wait;
     private Player house;
     private int roundCount = 1;
     private boolean playing = true;
     private boolean round = true;
+    private BlackJackConsole display;
 
     public BlackJack(Player[] players) {
         super(players, 1);
         house = new Player("House", 100000);
+        display = new BlackJackConsole();
     }
 
     public void play() {
-        System.out.println("Welcome to BlackJack!");
+        display.welcome();
         while (round) {
             if (checkBroke()) exit();
             else {
                 constructDeck();
-
-                System.out.println("Type exit to return to Casino, or any key to begin round.");
-                scanner = new Scanner(System.in);
-                if (playerExits()) exit();
+                if (playerExits(display.mainMenu())) exit();
                 else playBlackJack();
             }
         }
@@ -33,30 +32,27 @@ public class BlackJack extends CardGame{
     private boolean checkBroke() {
         for (Player player : players) {
             if (player.getCash() == 0) {
-                System.out.println(player.getName() + " too broke to play, good-bye.");
+                display.brokePlayer(player);
                 return true;
             }
         }
         return false;
     }
 
-    private boolean playerExits() {
-        String input = scanner.nextLine();
+    private boolean playerExits(String input) {
         return input.equalsIgnoreCase("exit");
     }
 
     private void playBlackJack() {
-        System.out.println("Round " + roundCount);
+        display.roundStart(roundCount);
 
         bettingPhase();
         System.out.println("Current pot value: $" + getPot());
-        waitForPlayers();
+        display.waitForPlayers();
 
         deal(2, house);
-        System.out.println("Current hands:");
-        System.out.println(displayHands());
-        waitForPlayers();
-        wait = scanner.nextLine();
+        display.playerHands(formatHands());
+        display.waitForPlayers();
 
         System.out.println("Begin player turns.");
         playerTurns();
@@ -111,11 +107,11 @@ public class BlackJack extends CardGame{
         playing = true;
 
         System.out.println("House turn:");
-        System.out.println(displayHands(house));
-        waitForPlayers();
+        display.houseHand(formatHands(house));
+        display.waitForPlayers();
         while(playing) {
             playing = houseLogic();
-            waitForPlayers();
+            display.waitForPlayers();
         }
     }
 
@@ -140,16 +136,10 @@ public class BlackJack extends CardGame{
         }
     }
 
-    private void waitForPlayers() {
-        System.out.println("Press any key to continue");
-        wait = scanner.next();
-    }
-
-    private void bettingPhase(){
-        System.out.println("Reminder, no change allowed whilst betting!");
+    private void bettingPhase() {
+        display.startBetting();
         for (Player player : players) {
-            System.out.println(player.getName() + " please place your bet.");
-            bet(scanner.nextInt(), player);
+            bet(display.betting(player), player);
         }
     }
     public void bet(int bet, Player player) {
@@ -161,13 +151,13 @@ public class BlackJack extends CardGame{
         } else {
             player.setCash(player.getCash() - bet);
         }
-        System.out.println("$" + bet + " bet placed.");
+        display.betPlaced(bet);
         setPot(bet);
     }
 
     private int allIn(Player player) {
         int x;
-        System.out.println("All In!!!");
+        display.allIn();
         x = player.getCash();
         player.setCash(0);
         return x;
@@ -175,15 +165,13 @@ public class BlackJack extends CardGame{
 
     private void houseHit(Player player) {
         player.addCardToHand(deck[0].draw());
-        System.out.println("house hand:");
-        System.out.println(displayHands(house));
+        display.houseHand(formatHands(house));
 
     }
 
     private void hit(Player player) {
         player.addCardToHand(deck[0].draw());
-        System.out.println("current hands:");
-        System.out.println(displayHands());
+        display.playerHands(formatHands());
     }
 
     private void roundEnd() {
