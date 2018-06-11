@@ -21,6 +21,7 @@ public class KnockOutTest {
     }
     @Test
     public void getPotTest(){
+        //knockOut.bettingPhase();
 
     }
 
