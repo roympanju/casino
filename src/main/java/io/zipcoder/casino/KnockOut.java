@@ -2,7 +2,7 @@ package io.zipcoder.casino;
 
 import io.zipcoder.AbstractClasses.Game;
 import io.zipcoder.Interfaces.Gamble;
-
+import io.zipcoder.Console.KnockOutConsole;
 import java.util.ArrayList;
 import java.util.Scanner;
 
